@@ -24,6 +24,5 @@ export default {
     namespaced: true,
     state,
     mutations,
-    actions
+    actions,
 }
-a
