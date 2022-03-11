@@ -2,7 +2,7 @@
   <div class="dashboard-container">
     <div class="app-container">
       <h2>
-        approvals
+        工资
       </h2>
     </div>
   </div>
