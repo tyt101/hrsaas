@@ -37,7 +37,7 @@ export default {
     methods: {
         operateDepts(type){
             if(type==='add'){
-
+                this.$emit('addDepts',this.treeNode)
             }else if(type==='edit'){
 
             }else{
