@@ -1,6 +1,6 @@
 <template>
-    <el-dialog :visible="showDialog" title="新增部门" :before-close="handleClose">
-        <el-form :model="formData" :rules="rule" label-width="120px">
+    <el-dialog :visible="showDialog" title="新增部门" @close="btnClose">
+        <el-form ref="deptForm" :model="formData" :rules="rule" label-width="120px">
             <el-form-item label="部门名称" prop="name">
                 <el-input v-model="formData.name" style="width:80%" placeholder="1-50个字符" ></el-input>
             </el-form-item>
@@ -8,7 +8,9 @@
                 <el-input v-model="formData.code" style="width:80%" placeholder="1-50个字符"></el-input>
             </el-form-item>
             <el-form-item label="部门负责人" prop="manager">
-                <el-select v-model="formData.manager" style="width:80%" placeholder="请选择" @focus="getEmployeeSimple"></el-select>  
+                <el-select v-model="formData.manager" style="width:80%" placeholder="请选择" @focus="getEmployeeSimple">
+                    <el-option v-for="p in people" :key="p.id" :label="p.username" :value="p.username"></el-option>
+                </el-select>  
             </el-form-item>
             <el-form-item label="部门介绍" prop="introduce">
                 <el-input v-model="formData.introduce" style="width:80%" placeholder="1-300个字符" type="textarea" :rows="3"></el-input>
@@ -17,15 +19,15 @@
         <el-row slot="footer" type="flex" justify="center">
         <!-- 列被分为24 -->
             <el-col :span="6">
-                <el-button type="primary" size="small">确定</el-button>
-                <el-button size="small">取消</el-button>
+                <el-button type="primary" size="small" @click="btnOK">确定</el-button>
+                <el-button size="small" @click="btnClose">取消</el-button>
             </el-col>
         </el-row>
     </el-dialog>
 </template>
 
 <script>
-import { getDepartments } from '@/api/departments'
+import { addDepartments, getDepartments } from '@/api/departments'
 import {getEmployeeSimple} from '@/api/employees'
 export default {
     data() {
@@ -80,16 +82,22 @@ export default {
         }
     },
     methods: {
-        handleClose(done) {
-        this.$confirm('确认关闭？')
-          .then(() => {
-            this.$emit('closedept')
-          })
-          .catch(() => {});
-      },
       async getEmployeeSimple(){
           this.people = await getEmployeeSimple()
-      }
+      },
+      btnOK(){
+          this.$refs.deptForm.validate(async isOK=>{
+              if(isOK){
+                  await addDepartments({...this.formData,pid:this.treeNode.id})
+                  this.$emit('addDepts')
+                  this.$emit('update:showDialog',false)
+              }
+          })
+      },
+      btnClose(){
+          this.$emit('update:showDialog',false)
+          this.$refs.deptForm.resetFields()
+      },
     },
 }
 </script>

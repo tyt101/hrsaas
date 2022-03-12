@@ -7,7 +7,7 @@
           <treetool slot-scope="{ data }" :tree-node="data"  @addDepts="addDepts" @deldepts="getDepartments" />
         </el-tree>
       </el-card>
-      <add-dept :show-dialog="showDialog" @closedept="closedept" :tree-node="node"></add-dept>
+      <add-dept :show-dialog.sync="showDialog" @closedept="closedept" :tree-node="node" @addDepts="getDepartments"></add-dept>
     </div>
   </div>
 </template>
@@ -42,7 +42,6 @@ export default {
     addDepts(node){
       this.showDialog=true
       this.node=node
-      console.log(node)
     },
     closedept(){
       this.showDialog=false
