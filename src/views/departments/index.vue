@@ -4,10 +4,10 @@
       <el-card class="tree-card">
         <treetool :tree-node="company" :isRoot="true"  @addDepts="addDepts"/>
         <el-tree :data="departs">
-          <treetool slot-scope="{ data }" :tree-node="data"  @addDepts="addDepts" @deldepts="getDepartments" />
+          <treetool slot-scope="{ data }" :tree-node="data"  @editDepts="editDepts"  @addDepts="addDepts" @deldepts="getDepartments" />
         </el-tree>
       </el-card>
-      <add-dept :show-dialog.sync="showDialog" @closedept="closedept" :tree-node="node" @addDepts="getDepartments"></add-dept>
+      <add-dept ref="addDept" :show-dialog.sync="showDialog" @closedept="closedept" :tree-node="node" @addDepts="getDepartments"></add-dept>
     </div>
   </div>
 </template>
@@ -45,6 +45,12 @@ export default {
     },
     closedept(){
       this.showDialog=false
+    },
+    editDepts(node){
+      this.showDialog=true
+      this.node=node
+      console.log('edit改变了')
+      this.$refs.addDept.getDepartDetail(node.id)
     }
   },
   

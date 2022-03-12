@@ -39,7 +39,7 @@ export default {
             if(type==='add'){
                 this.$emit('addDepts',this.treeNode)
             }else if(type==='edit'){
-
+                this.$emit('editDepts',this.treeNode)
             }else{
                 this.$confirm('你确定要删除吗').then(()=>{
                     return delDepartments(this.treeNode.id)

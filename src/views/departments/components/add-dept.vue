@@ -1,5 +1,5 @@
 <template>
-    <el-dialog :visible="showDialog" title="新增部门" @close="btnClose">
+    <el-dialog :visible="showDialog" :title="showTitle" @close="btnClose">
         <el-form ref="deptForm" :model="formData" :rules="rule" label-width="120px">
             <el-form-item label="部门名称" prop="name">
                 <el-input v-model="formData.name" style="width:80%" placeholder="1-50个字符" ></el-input>
@@ -27,7 +27,7 @@
 </template>
 
 <script>
-import { addDepartments, getDepartments } from '@/api/departments'
+import { addDepartments, getDepartments ,getDepartDetail } from '@/api/departments'
 import {getEmployeeSimple} from '@/api/employees'
 export default {
     data() {
@@ -85,6 +85,11 @@ export default {
       async getEmployeeSimple(){
           this.people = await getEmployeeSimple()
       },
+      async getDepartDetail(id){
+          this.formData =await getDepartDetail(id)
+          console.log(111)
+          console.log(this.formData)
+      },
       btnOK(){
           this.$refs.deptForm.validate(async isOK=>{
               if(isOK){
@@ -95,10 +100,21 @@ export default {
           })
       },
       btnClose(){
+          this.formData={
+            name:'',
+            code:'',
+            manager:'',
+            introduce:''
+          }
           this.$emit('update:showDialog',false)
           this.$refs.deptForm.resetFields()
       },
     },
+    computed:{
+        showTitle(){
+            return this.formData.id?'编辑部门':'新增子部门'
+        }
+    }
 }
 </script>
 
