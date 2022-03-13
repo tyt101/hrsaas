@@ -6,6 +6,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import * as directives from '@/directives'
+import * as filters from '@/filters'
 import '@/styles/index.scss' // global css
 import components from '@/components'
 Vue.use(components)
@@ -33,6 +34,9 @@ Vue.use(ElementUI, { locale })
 Vue.config.productionTip = false
 Object.keys(directives).forEach(key => {
     Vue.directive(key, directives[key])
+});
+Object.keys(filters).forEach(key => {
+    Vue.filter(key, filters[key])
 })
 
 // console.log(Object.keys(directives))
