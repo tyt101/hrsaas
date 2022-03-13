@@ -27,19 +27,29 @@
 </template>
 
 <script>
-import { addDepartments, getDepartments ,getDepartDetail } from '@/api/departments'
+import { addDepartments, getDepartments ,getDepartDetail, updateDepartments } from '@/api/departments'
 import {getEmployeeSimple} from '@/api/employees'
 export default {
     data() {
         const checkNameRepeat=async (rule,value,callback)=>{
             console.log(this.treeNode.id)
             const {depts} = await getDepartments()
-            const isRepeat = depts.filter(item=>item.pid ===this.treeNode.id).some(item=>item.name ===value)
+            let isRepeat = false
+            if(this.formData.id){
+                isRepeat = depts.filter(item=>item.pid ===this.treeNode.pid&&item.id!==this.treeNode.id).some(item=>item.name===value)
+            }else{
+                isRepeat = depts.filter(item=>item.pid ===this.treeNode.id).some(item=>item.name ===value)
+            }
             isRepeat?callback(new Error(`该部门已经存在${value}部门了`)):console.log('你好')
         };
         const checkCodeRepeat = async(rule,value,callback)=>{
             const {depts} = await getDepartments()
-            const isRepeat = depts.some(item=>item.code===value&&value)
+            let isRepeat = false
+            if(this.formData.id){
+                isRepeat = depts.filter(item=>item.id!==this.treeNode.id).some(item=>item.code===value&&value)
+            }else{
+                isRepeat = depts.some(item=>item.code===value&&value)
+            }
             isRepeat?callback(new Error(`该部门编码${value}已经存在`)):callback()
         }
         return {
@@ -87,13 +97,15 @@ export default {
       },
       async getDepartDetail(id){
           this.formData =await getDepartDetail(id)
-          console.log(111)
-          console.log(this.formData)
       },
       btnOK(){
           this.$refs.deptForm.validate(async isOK=>{
               if(isOK){
-                  await addDepartments({...this.formData,pid:this.treeNode.id})
+                  if(this.formData.id){
+                      await updateDepartments(this.formData)
+                  }else{
+                      await addDepartments({...this.formData,pid:this.treeNode.id})
+                  }
                   this.$emit('addDepts')
                   this.$emit('update:showDialog',false)
               }

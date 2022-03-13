@@ -3,7 +3,7 @@
     <div class="app-container">
       <el-card class="tree-card">
         <treetool :tree-node="company" :isRoot="true"  @addDepts="addDepts"/>
-        <el-tree :data="departs">
+        <el-tree :data="departs" default-expand-all>
           <treetool slot-scope="{ data }" :tree-node="data"  @editDepts="editDepts"  @addDepts="addDepts" @deldepts="getDepartments" />
         </el-tree>
       </el-card>
@@ -36,7 +36,9 @@ export default {
   methods: {
     async getDepartments(){
       const result = await getDepartments()
+      console.log(result)
       this.departs=tranListToTreeData(result.depts,'')
+      console.log(this.departs)
       this.company = {name:result.companyName,manager:'负责人',id:''}
     },
     addDepts(node){
