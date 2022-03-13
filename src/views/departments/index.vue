@@ -1,5 +1,5 @@
 <template>
-  <div class="dashboard-container">
+  <div class="dashboard-container" v-loading="loading">
     <div class="app-container">
       <el-card class="tree-card">
         <treetool :tree-node="company" :isRoot="true"  @addDepts="addDepts"/>
@@ -20,6 +20,7 @@ import AddDept from './components/add-dept'
 export default {
   data() {
     return {
+      loading: false,
       company: {},
       departs: [],
       showDialog:false,
@@ -35,11 +36,11 @@ export default {
   },
   methods: {
     async getDepartments(){
+      this.loading = true
       const result = await getDepartments()
-      console.log(result)
       this.departs=tranListToTreeData(result.depts,'')
-      console.log(this.departs)
       this.company = {name:result.companyName,manager:'负责人',id:''}
+      this.loading = false
     },
     addDepts(node){
       this.showDialog=true
