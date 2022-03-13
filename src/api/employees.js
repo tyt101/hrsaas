@@ -13,3 +13,10 @@ export function getEmployeeList(params) {
         params
     })
 }
+
+export function delEmployee(id) {
+    return request({
+        url: `/sys/user/${id}`,
+        method: 'delete'
+    })
+}
