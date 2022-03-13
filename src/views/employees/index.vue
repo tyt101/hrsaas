@@ -8,7 +8,7 @@
         <template slot="after">
           <el-button size="small" type="succuss">导入</el-button>
           <el-button size="small" type="danger">导出</el-button>
-          <el-button size="small" type="primary">新增员工</el-button>
+          <el-button size="small" type="primary" @click="showDialog=true">新增员工</el-button>
         </template>
       </pagetool>  
       <el-card v-loading="loading">
@@ -49,15 +49,18 @@
         </el-row>
       </el-card>
     </div>
+    <add-employee :show-dialog.sync="showDialog"></add-employee>
   </div>
 </template>
 
 <script>
 import EmployeeEnum from '@/api/constant/employees'
 import {getEmployeeList ,delEmployee} from '@/api/employees'
+import addEmployee from './components/add-employee.vue'
 export default {
   data() {
     return {
+      showDialog:false,
       loading:false,
       list:[],
       page:{
@@ -67,6 +70,7 @@ export default {
       }
     }
   },
+  components:{addEmployee},
   created() {
     this.getEmployeeList()
   },
