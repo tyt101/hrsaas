@@ -7,7 +7,8 @@ import 'element-ui/lib/theme-chalk/index.css'
 import locale from 'element-ui/lib/locale/lang/en' // lang i18n
 import * as directives from '@/directives'
 import '@/styles/index.scss' // global css
-
+import components from '@/components'
+Vue.use(components)
 import App from './App'
 import store from './store'
 import router from './router'

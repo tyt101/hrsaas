@@ -50,10 +50,10 @@ export default {
       this.showDialog=false
     },
     editDepts(node){
-      this.showDialog=true
       this.node=node
       console.log('edit改变了')
       this.$refs.addDept.getDepartDetail(node.id)
+      this.showDialog=true
     }
   },
   
