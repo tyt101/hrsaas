@@ -69,6 +69,7 @@ export default {
     handleClick(e) {
       console.log('handleClick')
       const files = e.target.files
+      console.log(files)
       const rawFile = files[0] // only use files[0]
       if (!rawFile) return
       this.upload(rawFile)
@@ -77,7 +78,7 @@ export default {
       console.log('upload')
       this.$refs['excel-upload-input'].value = null // fix can't select the same excel
       if (!this.beforeUpload) {
-        this.readerData(rawFile)
+        console.log('promise对象:', this.readerData(rawFile))
         return
       }
       const before = this.beforeUpload(rawFile)
@@ -91,11 +92,16 @@ export default {
       return new Promise((resolve, reject) => {
         const reader = new FileReader()
         reader.onload = e => {
+          console.log('e:', e)
           const data = e.target.result
           const workbook = XLSX.read(data, { type: 'array' })
+          console.log('workbook:', workbook)
           const firstSheetName = workbook.SheetNames[0]
+          console.log('firstSheetName:', firstSheetName)
           const worksheet = workbook.Sheets[firstSheetName]
+          console.log('worksheet', worksheet)
           const header = this.getHeaderRow(worksheet)
+
           const results = XLSX.utils.sheet_to_json(worksheet)
           this.generateData({ header, results })
           this.loading = false
