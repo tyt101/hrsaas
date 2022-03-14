@@ -1,27 +1,27 @@
 <template>
-    <el-card class="page-tools">
-        <el-row type="flex" justify="space-between" align="center">
-            <el-col v-if="showbefore">
-                <div class="before">
-                    <i class="el-icon-info" />
-                    <slot name="before"/>
-                </div>
-            </el-col>
-            <el-col>
-                <el-row type="flex" justify="end">
-                    <slot name="after"/>
-                </el-row>
-            </el-col>
+  <el-card class="page-tools">
+    <el-row type="flex" justify="space-between" align="center">
+      <el-col v-if="showbefore">
+        <div class="before">
+          <i class="el-icon-info" />
+          <slot name="before" />
+        </div>
+      </el-col>
+      <el-col>
+        <el-row type="flex" justify="end">
+          <slot name="after" />
         </el-row>
-    </el-card>
+      </el-col>
+    </el-row>
+  </el-card>
 </template>
 
 <script>
 export default {
-    props:{
-        showbefore:{
-            type:Boolean,
-            default:false
+    props: {
+        showbefore: {
+            type: Boolean,
+            default: false
         }
     }
 }

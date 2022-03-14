@@ -1,6 +1,5 @@
 import request from '@/utils/request'
 
-
 export function getEmployeeSimple() {
     return request({
         url: '/sys/user/simple'
@@ -24,6 +23,14 @@ export function delEmployee(id) {
 export function addEmployee(data) {
     return request({
         url: '/sys/user',
+        method: 'post',
+        data
+    })
+}
+
+export function importEmployee(data) {
+    return request({
+        url: '/sys/user/batch',
         method: 'post',
         data
     })

@@ -1,12 +1,7 @@
 <template>
   <div class="dashboard-container">
     <div class="dashboard-text">name: {{ name }}</div>
-    <pagetool :showbefore="true">
-      <template v-slot:before>
-        <span >你好</span>
-      </template>
-      <el-button slot="after" type="primary">点击</el-button>
-    </pagetool>
+    <upload-excel />
   </div>
 </template>
 
@@ -18,7 +13,7 @@ export default {
     ...mapGetters([
       'name'
     ])
-  },
+  }
 }
 </script>
 
