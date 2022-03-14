@@ -1,11 +1,15 @@
 <template>
-  <div>
+  <div class="upload-excel">
+    <div class="btn-upload">
+      <el-button :loading="loading" size="mini" type="primary" @click="handleUpload">
+        点击上传
+      </el-button>
+    </div>
+
     <input ref="excel-upload-input" class="excel-upload-input" type="file" accept=".xlsx, .xls" @change="handleClick">
     <div class="drop" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
-      Drop excel file here or
-      <el-button :loading="loading" style="margin-left:16px;" size="mini" type="primary" @click="handleUpload">
-        Browse
-      </el-button>
+      <i class="el-icon-upload" />
+      <span>将文件拖到此处</span>
     </div>
   </div>
 </template>
@@ -28,11 +32,13 @@ export default {
   },
   methods: {
     generateData({ header, results }) {
+      console.log('generateData')
       this.excelData.header = header
       this.excelData.results = results
       this.onSuccess && this.onSuccess(this.excelData)
     },
     handleDrop(e) {
+      console.log('handleDrop')
       e.stopPropagation()
       e.preventDefault()
       if (this.loading) return
@@ -51,23 +57,24 @@ export default {
       e.preventDefault()
     },
     handleDragover(e) {
+      console.log('handleDragover')
       e.stopPropagation()
       e.preventDefault()
       e.dataTransfer.dropEffect = 'copy'
     },
     handleUpload() {
+      console.log('handleUpload')
       this.$refs['excel-upload-input'].click()
     },
     handleClick(e) {
+      console.log('handleClick')
       const files = e.target.files
       const rawFile = files[0] // only use files[0]
-      console.log(rawFile)
       if (!rawFile) return
       this.upload(rawFile)
     },
     upload(rawFile) {
-      // console.log(this.$refs['excel-upload-input'])
-      // console.log(this.$refs['excel-upload-input'].value)
+      console.log('upload')
       this.$refs['excel-upload-input'].value = null // fix can't select the same excel
       if (!this.beforeUpload) {
         this.readerData(rawFile)
@@ -79,30 +86,26 @@ export default {
       }
     },
     readerData(rawFile) {
+      console.log('readerData')
       this.loading = true
       return new Promise((resolve, reject) => {
         const reader = new FileReader()
-        // reader.onloadstart
-        try {
-            reader.onload = (event) => {
-            const data = event.target.result
-            console.log(data)
-            const workbook = XLSX.read(data, { type: 'array' })
-            const firstSheetName = workbook.SheetNames[0]
-            const worksheet = workbook.Sheets[firstSheetName]
-            const header = this.getHeaderRow(worksheet)
-            const results = XLSX.utils.sheet_to_json(worksheet)
-            this.generateData({ header, results })
-            this.loading = false
-            resolve()
-          }
-        } catch (error) {
-          console.log(error)
+        reader.onload = e => {
+          const data = e.target.result
+          const workbook = XLSX.read(data, { type: 'array' })
+          const firstSheetName = workbook.SheetNames[0]
+          const worksheet = workbook.Sheets[firstSheetName]
+          const header = this.getHeaderRow(worksheet)
+          const results = XLSX.utils.sheet_to_json(worksheet)
+          this.generateData({ header, results })
+          this.loading = false
+          resolve()
         }
         reader.readAsArrayBuffer(rawFile)
       })
     },
     getHeaderRow(sheet) {
+      console.log('getHeaderRow')
       const headers = []
       const range = XLSX.utils.decode_range(sheet['!ref'])
       let C
@@ -118,27 +121,35 @@ export default {
       return headers
     },
     isExcel(file) {
+      console.log('isExcel')
       return /\.(xlsx|xls|csv)$/.test(file.name)
     }
   }
 }
 </script>
-
-<style scoped>
-.excel-upload-input{
-  display: none;
-  z-index: -9999;
-}
-.drop{
-  border: 2px dashed #bbb;
-  width: 600px;
-  height: 160px;
-  line-height: 160px;
-  margin: 0 auto;
-  font-size: 24px;
-  border-radius: 5px;
-  text-align: center;
-  color: #bbb;
-  position: relative;
+<style scoped lang="scss">
+.upload-excel {
+  display: flex;
+  justify-content: center;
+   margin-top: 100px;
+   .excel-upload-input{
+       display: none;
+        z-index: -9999;
+     }
+   .btn-upload , .drop{
+      border: 1px dashed #bbb;
+      width: 350px;
+      height: 160px;
+      text-align: center;
+      line-height: 160px;
+   }
+   .drop{
+       line-height: 80px;
+       color: #bbb;
+      i {
+        font-size: 60px;
+        display: block;
+      }
+   }
 }
 </style>

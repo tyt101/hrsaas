@@ -6,8 +6,8 @@
           共{{ page.total }}条记录
         </template>
         <template slot="after">
-          <el-button size="small" type="succuss">导入</el-button>
-          <el-button size="small" type="danger">导出</el-button>
+          <el-button size="small" type="succuss" @click="$router.push('/import')">导入</el-button>
+          <el-button size="small" type="danger" @click="exportData">导出</el-button>
           <el-button size="small" type="primary" @click="showDialog=true">新增员工</el-button>
         </template>
       </pagetool>
@@ -58,6 +58,7 @@
 import EmployeeEnum from '@/api/constant/employees'
 import { getEmployeeList, delEmployee } from '@/api/employees'
 import addEmployee from './components/add-employee.vue'
+import { formatDate } from '@/filters'
 export default {
   components: { addEmployee },
   data() {
@@ -94,12 +95,59 @@ export default {
     async delEmployee(id) {
       try {
         await this.$confirm('确认删除吗')
+        console.log('删除')
         await delEmployee(id)
         this.$message.success('删除成功')
         this.getEmployeeList()
       } catch (error) {
         console.log(error)
       }
+    },
+    exportData() {
+      const headers = {
+        '姓名': 'username',
+        '手机号': 'mobile',
+        '入职日期': 'timeOfEntry',
+        '聘用形式': 'formOfEmployment',
+        '转正日期': 'correctionTime',
+        '工号': 'workNumber',
+        '部门': 'departmentName'
+      }
+      import('@/vendor/Export2Excel').then(async excel => {
+        const { rows } = await getEmployeeList({ page: 1, size: this.page.total })
+        const data = this.formatJson1(headers, rows)
+        excel.export_json_to_excel({
+          multiHeader: [['姓名', '主要信息', '', '', '', '', '部门']],
+          merges: ['A1:A2', 'B1:F1', 'G1:G2'],
+          header: Object.keys(headers),
+          data: data,
+          filename: '怪异文件',
+          bookType: 'xlsx'
+        })
+      })
+    },
+    formatJson(headers, rows) {
+      return rows.map(item => {
+        return Object.keys(headers).map(key => {
+          return item[headers[key]]
+        })
+      })
+    },
+    formatJson1(headers, rows) {
+      const b = []
+      rows.map(item => {
+        const a = []
+        Object.keys(headers).map(key => {
+          if (headers[key] === 'timeOfEntry' || headers[key] === 'correctionTime') {
+            a.push(formatDate(item[headers[key]]))
+          } else if (headers[key] === 'formOfEmployment') {
+            const obj = EmployeeEnum.hireType.find(obj => obj.id === item[headers[key]])
+            a.push(obj ? obj.value : '未知')
+          } else { a.push(item[headers[key]]) }
+        })
+        b.push(a)
+      })
+      return b
     }
   }
 }

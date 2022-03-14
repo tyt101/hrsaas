@@ -117,10 +117,10 @@ export function param2Obj(url) {
 }
 
 export function tranListToTreeData(list, rootValue) {
-    let arr = []
+    const arr = []
     list.forEach(item => {
         if (item.pid === rootValue) {
-            let child = tranListToTreeData(list, item.id)
+            const child = tranListToTreeData(list, item.id)
             if (child.length) {
                 item.children = child
             }

@@ -34,7 +34,7 @@ Vue.use(ElementUI, { locale })
 Vue.config.productionTip = false
 Object.keys(directives).forEach(key => {
     Vue.directive(key, directives[key])
-});
+})
 Object.keys(filters).forEach(key => {
     Vue.filter(key, filters[key])
 })
