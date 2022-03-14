@@ -48,7 +48,7 @@
       <div class="tips">
         <span style="margin-right:20px;">账号: 13800000002</span>
         <span> 密码: 123456</span>
-   </div>
+      </div>
 
     </el-form>
   </div>
@@ -56,7 +56,7 @@
 
 <script>
 import { validMobile } from '@/utils/validate'
-import {mapActions} from 'vuex'
+import { mapActions } from 'vuex'
 export default {
   name: 'Login',
   data() {
@@ -74,12 +74,12 @@ export default {
       },
       loginRules: {
         mobile: [
-          { required: true, trigger: 'blur',message:"手机号不能为空"},
-          {validator:validateMobile,trigger:'blur'}
+          { required: true, trigger: 'blur', message: '手机号不能为空' },
+          { validator: validateMobile, trigger: 'blur' }
           ],
         password: [
-          { required: true, trigger: 'blur', message:"密码不能为空" },
-          {trigger:'blur',min:6,max:16,message:'密码长度为6-16'}
+          { required: true, trigger: 'blur', message: '密码不能为空' },
+          { trigger: 'blur', min: 6, max: 16, message: '密码长度为6-16' }
           ]
       },
       loading: false,
@@ -108,16 +108,16 @@ export default {
       })
     },
     handleLogin() {
-      this.$refs.loginForm.validate(async isOk=>{
-        if(isOk){
+      this.$refs.loginForm.validate(async isOk => {
+        if (isOk) {
             try {
-              this.loading=true
+              this.loading = true
               await this['user/login'](this.loginForm)
               this.$router.push('/')
             } catch (error) {
               console.log(error)
-            }finally{
-              this.loading=false
+            } finally {
+              this.loading = false
             }
         }
       })
