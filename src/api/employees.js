@@ -35,3 +35,38 @@ export function importEmployee(data) {
         data
     })
 }
+
+export function saveUserDetailById(data) {
+    return request({
+        url: `/sys/user/${data.id}`,
+        method: 'put',
+        data
+    })
+}
+
+export function getPersonalDetail(id) {
+    console.log('已进入')
+    return request({
+        url: `/employees/${id}/personalInfo`
+    })
+}
+export function savePersonalDetail(data) {
+    return request({
+        url: `/employees/${data.userId}/personalInfo`,
+        method: 'put',
+        data
+    })
+}
+export function getJobDetail(id) {
+    return request({
+        url: `/employees/${id}/jobs`
+    })
+}
+
+export function saveJobDetail(data) {
+    return request({
+        url: `/employees/${data.userId}/jobs`,
+        data,
+        method: 'put'
+    })
+}

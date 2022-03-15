@@ -11,7 +11,7 @@ export function login(data) {
 export function getUserInfo() {
     return request({
         url: '/sys/profile',
-        method: 'post',
+        method: 'post'
     })
 }
 
@@ -21,3 +21,11 @@ export function getUserDetailById(id) {
     })
 }
 export function logout() {}
+
+export function saveUserDetailById(data) {
+    return request({
+        url: `/sys/user/${data.id}`,
+        data,
+        method: 'put'
+    })
+}

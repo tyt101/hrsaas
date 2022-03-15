@@ -15,6 +15,7 @@
         <el-table :data="list" border="">
           <el-table-column type="index" label="序号" sortable="" />
           <el-table-column prop="username" label="姓名" sortable="" />
+          <el-table-column prop="mobile" label="手机号" sortable="" />
           <el-table-column prop="workNumber" label="工号" sortable="" />
           <el-table-column prop="formOfEmployment" label="聘用形式" :formatter="formatEmployment" sortable="" />
           <el-table-column prop="departmentName" label="部门" sortable="" />
@@ -30,7 +31,7 @@
           </el-table-column>
           <el-table-column label="操作" sortable="" fixed="right" width="280">
             <template slot-scope="{row}">
-              <el-button size="small" type="text">查看</el-button>
+              <el-button size="small" type="text" @click="$router.push(`/employees/detail/${row.id}`)">查看</el-button>
               <el-button size="small" type="text">转正</el-button>
               <el-button size="small" type="text">调岗</el-button>
               <el-button size="small" type="text">离职</el-button>

@@ -26,14 +26,14 @@ service.interceptors.response.use(
     response => {
         const { success, message, data } = response.data
         if (success) {
-            console.log('success')
             return data
         } else {
-            console.log('default')
             Message.error(message)
             return Promise.reject(new Error(message))
         }
     }, error => {
+        console.log('error')
+        console.log(error)
         if (error && error.response && error.response.data.code === 10002) {
             store.dispatch('user/logout')
             router.push('/login')
@@ -45,7 +45,7 @@ service.interceptors.response.use(
 )
 
 function isCheckTimeOut() {
-    let currentTime = Date.now()
-    return ((currentTime - getTimeStamp()) / 1000) > TIMEOUT;
+    const currentTime = Date.now()
+    return ((currentTime - getTimeStamp()) / 1000) > TIMEOUT
 }
 export default service
