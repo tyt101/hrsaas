@@ -20,7 +20,7 @@
             <user-info />
           </el-tab-pane>
           <el-tab-pane label="岗位信息">
-            <!-- <job-info /> -->
+            <job-info />
           </el-tab-pane>
         </el-tabs>
       </el-card>
@@ -33,10 +33,10 @@ import { mapGetters } from 'vuex'
 import { getUserDetailById } from '@/api/user'
 import { saveUserDetailById } from '@/api/employees'
 import UserInfo from './components/user-info.vue'
-// import JobInfo from './components/job-info.vue'
+import JobInfo from './components/job-info.vue'
 export default {
   name: 'Detail',
-  components: { UserInfo },
+  components: { UserInfo, JobInfo },
   data() {
     return {
       userId: this.$route.params.id,

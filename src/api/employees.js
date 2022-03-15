@@ -63,10 +63,10 @@ export function getJobDetail(id) {
     })
 }
 
-export function saveJobDetail(data) {
+export function updateJob(data) {
     return request({
         url: `/employees/${data.userId}/jobs`,
-        data,
-        method: 'put'
+        method: 'put',
+        data
     })
 }

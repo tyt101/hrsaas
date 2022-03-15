@@ -359,7 +359,7 @@ export default {
     },
     created() {
       this.getUserDetailById()
-      this.getPersonalDetail()
+      // this.getPersonalDetail()
     },
     methods: {
       async getUserDetailById() {
