@@ -37,7 +37,7 @@
       <el-row class="inline-info">
         <el-col :span="12">
           <el-form-item label="手机">
-            <el-input v-model="userInfo.mobile" />
+            <el-input v-model="userInfo.mobile" disabled />
           </el-form-item>
         </el-col>
         <el-col :span="12">
@@ -58,7 +58,7 @@
         <el-col :span="12">
           <el-form-item label="员工头像">
             <!-- 放置上传图片 -->
-
+            <image-upload ref="staffphoto" />
           </el-form-item>
         </el-col>
       </el-row>
@@ -90,6 +90,7 @@
 
         <el-form-item label="员工照片">
           <!-- 放置上传图片 -->
+          <image-upload />
         </el-form-item>
         <el-form-item label="国家/地区">
           <el-select v-model="formData.nationalArea" class="inputW2">
@@ -364,13 +365,21 @@ export default {
     methods: {
       async getUserDetailById() {
         this.userInfo = await getUserDetailById(this.userId)
+        if (this.userInfo.staffPhoto) { this.$refs.staffphoto.fileList = [{ url: this.userInfo.staffPhoto, upload: true }] }
       },
       async getPersonalDetail() {
         this.userInfo = await getPersonalDetail(this.userId)
       },
       async saveUser() {
+        const fileList = this.$refs.staffphoto.fileList
+        if (fileList.some(item => !item.upload)) {
+          this.$message.warning('你的图片还没有上传完毕')
+          return
+        } else {
+          this.userInfo.staffPhoto = this.$refs.staffphoto.fileList[0].url
         await saveUserDetailById(this.userInfo)
         this.$message.success('保存基本信息成功')
+        }
       },
       async savePersonal() {
         console.log('savePersonal')

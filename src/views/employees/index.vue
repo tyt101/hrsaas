@@ -15,6 +15,11 @@
         <el-table :data="list" border="">
           <el-table-column type="index" label="序号" sortable="" />
           <el-table-column prop="username" label="姓名" sortable="" />
+          <el-table-column prop="staffPhoto" label="头像" sortable="">
+            <template slot-scope="{row}">
+              <img v-imagerror="require('@/assets/common/bigUserHeader.png')" :src="row.staffPhoto" alt="" style="width:100px;height:100px" @click="getQrCode(row.staffPhoto)">
+            </template>
+          </el-table-column>
           <el-table-column prop="mobile" label="手机号" sortable="" />
           <el-table-column prop="workNumber" label="工号" sortable="" />
           <el-table-column prop="formOfEmployment" label="聘用形式" :formatter="formatEmployment" sortable="" />
@@ -35,7 +40,7 @@
               <el-button size="small" type="text">转正</el-button>
               <el-button size="small" type="text">调岗</el-button>
               <el-button size="small" type="text">离职</el-button>
-              <el-button size="small" type="text">角色</el-button>
+              <el-button size="small" type="text" @click="editRow(row.id)">角色</el-button>
               <el-button size="small" type="text" @click="delEmployee(row.id)">删除</el-button>
             </template>
           </el-table-column>
@@ -52,6 +57,12 @@
       </el-card>
     </div>
     <add-employee :show-dialog.sync="showDialog" />
+    <el-Dialog :visible.sync="showCodeDialog" title="二维码">
+      <el-row type="flex" justify="center" align="center">
+        <canvas ref="myCanvas" />
+      </el-row>
+    </el-Dialog>
+    <assign-row ref="assignRole" :show-role-dialog.sync="showRoleDialog" :user-id="userId" />
   </div>
 </template>
 
@@ -59,11 +70,16 @@
 import EmployeeEnum from '@/api/constant/employees'
 import { getEmployeeList, delEmployee } from '@/api/employees'
 import addEmployee from './components/add-employee.vue'
+import assignRow from './components/assign-row.vue'
 import { formatDate } from '@/filters'
+import QrCode from 'qrcode'
 export default {
-  components: { addEmployee },
+  components: { addEmployee, assignRow },
   data() {
     return {
+      userId: null,
+      showRoleDialog: false,
+      showCodeDialog: false,
       showDialog: false,
       loading: false,
       list: [],
@@ -78,6 +94,16 @@ export default {
     this.getEmployeeList()
   },
   methods: {
+    getQrCode(src) {
+      if (src) {
+        this.showCodeDialog = true
+        this.$nextTick(() => {
+          QrCode.toCanvas(this.$refs.myCanvas, src)
+        })
+      } else {
+        this.$message.warning('该用户还未上传头像')
+      }
+    },
     async getEmployeeList() {
       this.loading = true
       const { total, rows } = await getEmployeeList(this.page)
@@ -149,6 +175,11 @@ export default {
         b.push(a)
       })
       return b
+    },
+    async editRow(id) {
+      this.userId = id
+      await this.$refs.assignRole.getUserDetailById(id)
+      this.showRoleDialog = true
     }
   }
 }

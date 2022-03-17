@@ -107,12 +107,12 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapGetters(['companyId'])
+  },
   created() {
     this.getRoleList()
     this.getCompanyInfo()
-  },
-  computed: {
-    ...mapGetters(['companyId'])
   },
   methods: {
     async getRoleList() {

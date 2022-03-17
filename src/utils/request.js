@@ -33,7 +33,6 @@ service.interceptors.response.use(
         }
     }, error => {
         console.log('error')
-        console.log(error)
         if (error && error.response && error.response.data.code === 10002) {
             store.dispatch('user/logout')
             router.push('/login')
