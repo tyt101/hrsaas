@@ -43,7 +43,6 @@ export default {
       async getRoleList() {
         const { rows } = await getRoleList({ page: 1, pagesize: 5 })
         this.checkList = rows
-        console.log(rows)
       },
       async getUserDetailById(id) {
         const { roleIds } = await getUserDetailById(id)

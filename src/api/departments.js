@@ -23,7 +23,7 @@ export function addDepartments(data) {
 
 export function getDepartDetail(id) {
     return request({
-        url: `/company/department/${id}`,
+        url: `/company/department/${id}`
     })
 }
 

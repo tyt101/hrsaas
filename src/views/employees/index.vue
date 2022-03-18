@@ -8,7 +8,7 @@
         <template slot="after">
           <el-button size="small" type="succuss" @click="$router.push('/import')">导入</el-button>
           <el-button size="small" type="danger" @click="exportData">导出</el-button>
-          <el-button size="small" type="primary" @click="showDialog=true">新增员工</el-button>
+          <el-button size="small" type="primary" :disabled="!checkPermission('POINT-USER-ADD')" @click="showDialog=true">新增员工</el-button>
         </template>
       </pagetool>
       <el-card v-loading="loading">

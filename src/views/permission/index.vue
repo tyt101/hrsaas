@@ -48,6 +48,7 @@ import { tranListToTreeData } from '@/utils'
 export default {
   data() {
     return {
+      showName: '',
       showDialog: false,
       list: [],
       formData: {

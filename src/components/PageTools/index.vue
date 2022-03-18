@@ -13,6 +13,9 @@
         </el-row>
       </el-col>
     </el-row>
+    <el-row>
+      <slot name="content" />
+    </el-row>
   </el-card>
 </template>
 

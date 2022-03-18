@@ -11,7 +11,7 @@
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
           <img v-imagerror="defaultImg" :src="staffPhoto" class="user-avatar">
-          <span class="name">{{name}}</span>
+          <span class="name">{{ name }}</span>
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
@@ -37,13 +37,13 @@ import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
 
 export default {
-  data() {
-    return {
-      defaultImg:require('@/assets/common/head.jpg')
-    }
-  },
   components: {
     Hamburger
+  },
+  data() {
+    return {
+      defaultImg: require('@/assets/common/head.jpg')
+    }
   },
   computed: {
     ...mapGetters([
@@ -71,7 +71,7 @@ export default {
   position: relative;
   background-image: -webkit-linear-gradient(left, #3d6df8, #5b8cff);
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
-  
+
   .hamburger-container {
     line-height: 46px;
     height: 100%;
@@ -114,7 +114,7 @@ export default {
     &:focus {
       outline: none;
     }
-    
+
    .name {
           color: #fff;
           vertical-align: middle;
