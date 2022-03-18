@@ -2,13 +2,15 @@
   <div v-loading="loading" class="dashboard-container">
     <div class="app-container">
       <!-- 工具栏 -->
-      <page-tools :show-before="true">
+      <pagetool :showbefore="true">
         <!-- 前面内容 -->
-        <template v-slot:before>当前审批中 0 本月审批通过 1 本月审批驳回 0</template>
-        <template v-slot:after>
+        <template slot="before">
+          当前审批中 0 本月审批通过 1 本月审批驳回 0
+        </template>
+        <template slot="after">
           <el-button size="mini" type="primary" @click="$router.push('/approvals/securitySetting')">流程设置</el-button>
         </template>
-      </page-tools>
+      </pagetool>
       <!-- <ApprovalPageTool /> -->
       <el-card class="hr-block">
         <el-table :data="list" style="width: 100%" :default-sort="{prop: 'date', order: 'descending'}">

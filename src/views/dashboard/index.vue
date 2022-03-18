@@ -5,11 +5,11 @@
       <div>
         <div class="fl headL">
           <div class="headImg">
-            <img src="@/assets/common/head.jpg">
+            <img v-imagerror="import('@/assets/common/head.jpg')" :src="staffPhoto">
           </div>
           <div class="headInfoTip">
-            <p class="firstChild">早安，管理员，祝你开心每一天！</p>
-            <p class="lastChild">早安，管理员，祝你开心每一天！</p>
+            <p class="firstChild">早安,{{ name }}，祝你开心每一天！</p>
+            <p class="lastChild">{{ name }} |{{ userInfo.companyName }}-{{ userInfo.departmentName }}</p>
           </div>
         </div>
         <div class="fr" />
@@ -24,7 +24,8 @@
           <div slot="header" class="header">
             <span>工作日历</span>
           </div>
-        <!-- 放置日历组件 -->
+          <!-- 放置日历组件 -->
+          <work-canlendar />
         </el-card>
         <!-- 公告 -->
         <el-card class="box-card">
@@ -71,10 +72,10 @@
             <span>流程申请</span>
           </div>
           <div class="sideNav">
-            <el-button class="sideBtn">加班离职</el-button>
+            <el-button class="sideBtn" @click="showDialog = true">加班离职</el-button>
             <el-button class="sideBtn">请假调休</el-button>
-            <el-button class="sideBtn">审批列表</el-button>
-            <el-button class="sideBtn">我的信息</el-button>
+            <el-button class="sideBtn" @click="$router.push('/users/approvals')">审批列表</el-button>
+            <el-button class="sideBtn" @click="$router.push('/users/info')">我的信息</el-button>
           </div>
         </el-card>
 
@@ -83,7 +84,8 @@
           <div slot="header" class="header">
             <span>绩效指数</span>
           </div>
-        <!-- 放置雷达图 -->
+          <!-- 放置雷达图 -->
+          <radar />
         </el-card>
         <!-- 帮助连接 -->
         <el-card class="box-card">
@@ -115,18 +117,80 @@
         </el-card>
       </el-col>
     </el-row>
+    <el-dialog :visible.sync="showDialog">
+      <el-form ref="ruleform" :model="ruleForm" :rules="rules" label-width="120px">
+        <el-form-item prop="exceptTime" label="离职时间">
+          <el-date-picker
+            v-model="ruleForm.exceptTime"
+            type="datetime"
+            format="yy:MM:dd HH:mm:ss"
+          />
+        </el-form-item>
+        <el-form-item prop="reason" label="离职原因">
+          <el-input v-model="ruleForm.reason" style="width: 70%;" type="textarea" />
+        </el-form-item>
+      </el-form>
+      <el-row slot="footer" type="flex" justify="center">
+        <el-col :span="5">
+          <el-button @click="btnCancel">取消</el-button>
+          <el-button type="primary" @click="btnOk">确认</el-button>
+        </el-col>
+      </el-row>
+    </el-dialog>
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-
+import { mapGetters, createNamespacedHelpers } from 'vuex'
+import WorkCanlendar from './componens/work-calendar.vue'
+import radar from './componens/radar.vue'
+import { startProcess } from '@/api/approvals'
+const { mapState } = createNamespacedHelpers('user')
 export default {
   name: 'Dashboard',
+  components: {
+    WorkCanlendar,
+    radar
+  },
+  data() {
+    return {
+      ruleForm: {
+        exceptTime: '',
+        reason: '',
+        processKey: 'process_dimission', // 特定的审批
+        processName: '离职'
+      },
+      showDialog: false,
+      rules: {
+        exceptTime: [{ required: true, trigger: 'blur', message: '离职时间不能为空' }]
+      }
+    }
+  },
   computed: {
     ...mapGetters([
-      'name'
-    ])
+      'name', 'staffPhoto'
+    ]),
+    ...mapState(['userInfo'])
+  },
+  methods: {
+    btnOk() {
+      this.$refs.ruleform.validate().then(async() => {
+        console.log(111)
+        await startProcess({ ...this.ruleForm, userId: this.userInfo.userId, username: this.userInfo.username })
+        this.$message.success('离职申请提交完毕')
+        this.showDialog = false
+      })
+    },
+    btnCancel() {
+      this.ruleForm = {
+        exceptTime: '',
+        reason: '',
+        processKey: 'process_dimission', // 特定的审批
+        processName: '离职'
+      }
+      this.$refs.ruleform.resetFields()
+      this.showDialog = false
+    }
   }
 }
 </script>

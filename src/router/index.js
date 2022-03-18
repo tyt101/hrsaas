@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 Vue.use(Router)
+import userRputer from './modules/user'
 import approvalsRouter from './modules/approvals'
 import departmentsRouter from './modules/departments'
 import employeesRouter from './modules/employees'
@@ -48,7 +49,8 @@ export const constantRoutes = [{
             component: () =>
                 import ('@/views/import')
         }]
-    }
+    },
+    userRputer
     // 404 page must be placed at the end !!!
 
 ]
