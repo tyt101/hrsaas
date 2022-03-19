@@ -39,7 +39,7 @@
 <script>
 import { getUserDetailById } from '@/api/user'
 import { updateUser } from '@/api/approvals'
-import { updatePersonal, getPersonalDetail } from '@/api/employees'
+import { savePersonalDetail, getPersonalDetail } from '@/api/employees'
 import { mapGetters } from 'vuex'
 export default {
   name: 'UsersTableIndex',
@@ -62,7 +62,7 @@ export default {
     async onSubmit() {
       const user = this.myInfo
       await updateUser(user)
-      await updatePersonal(user)
+      await savePersonalDetail(user)
       this.$message.success('保存成功')
     },
     onCancel() {

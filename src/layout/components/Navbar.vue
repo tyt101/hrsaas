@@ -35,7 +35,7 @@
 <script>
 import { mapGetters } from 'vuex'
 import Hamburger from '@/components/Hamburger'
-
+// import screenfull from '@/components/ScreenFull'
 export default {
   components: {
     Hamburger
