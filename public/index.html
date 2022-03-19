@@ -9,6 +9,9 @@
     <title>
         <%= webpackConfig.name %>
     </title>
+    <% for(var css of htmlWebpackPlugin.options.cdn.css) { %>
+        <link rel="stylesheet" href="<%=css%>">
+        <% } %>
 </head>
 
 <body>
@@ -17,6 +20,9 @@
     </noscript>
     <div id="app"></div>
     <!-- built files will be auto injected -->
+    <% for(var js of htmlWebpackPlugin.options.cdn.js) { %>
+        <script src="<%=js%>"></script>
+        <% } %>
 </body>
 
 </html>

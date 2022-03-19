@@ -65,7 +65,8 @@ export const asyncRoutes = [
     socialRouter
 ]
 const createRouter = () => new Router({
-    // mode: 'history', // require service support
+    mode: 'history', // require service support
+    base: 'tyt',
     scrollBehavior: () => ({ y: 0 }),
     routes: [...constantRoutes]
 })
